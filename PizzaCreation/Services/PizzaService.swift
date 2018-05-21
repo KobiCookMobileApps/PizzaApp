@@ -45,14 +45,14 @@ class PizzaService {
     
     
     
-    static var persistentContainer: NSPersistentContainer = {
-        
-        var delegate: AppDelegate!
-        DispatchQueue.main.sync {
-            delegate = UIApplication.shared.delegate as! AppDelegate
-        }
-        return delegate.persistentContainer
-    }()
+//    static var persistentContainer: NSPersistentContainer = {
+//
+//        var delegate: AppDelegate!
+//        DispatchQueue.main.sync {
+//            delegate = UIApplication.shared.delegate as! AppDelegate
+//        }
+//        return delegate.persistentContainer
+//    }()
     
     
     private class func uploader(array: [Pizza:Int]) {
@@ -222,9 +222,8 @@ class PizzaService {
     
     class func saveTopping(toppings: [String]) {
         
-        let newTopping = Order(toppings: toppings)
-        let toppingRef = PizzaService.toppingsRef.child(newTopping.toppings.joined(separator: ", "))
-        toppingRef.setValue(toppings)
+        PizzaService.toppingsRef.setValue(toppings)
+    
     }
     
     class func saveOrder(toppings: [String]) {
@@ -261,6 +260,7 @@ class PizzaService {
 //            
 //        }
     }
+    
     
     
     class func getOrders(completion: @escaping OrderHandler) {
@@ -307,22 +307,15 @@ class PizzaService {
 //        }
     }
     
-    
-//    class func getToppings(completion: @escaping ToppingsHandler) {
-//
-//        PizzaService.toppingsRef.observe(.value) { (snapshot) in
-//
-//            var finalToppings = [String]()
-//
-//            for snap in snapshot.children {
-//                let data: DataSnapshot = snap as! DataSnapshot
-//                let dataTopping = Toppings(snapshot: data)
-//                let converted = dataTopping?.toppings
-//                finalToppings = converted!
-//            }
-//            completion(finalToppings)
-//            print("fetched firebase toppings")
-//        }
-//
-//    }
+    class func getToppings(completion: @escaping ToppingsHandler) {
+
+        PizzaService.toppingsRef.observe(.value) { (snapshot) in
+            let toppings = snapshot.value as? [String]
+            completion(toppings!)
+            print ("fetched firebase toppings")
+
+
+        }
+
+    }
 }

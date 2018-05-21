@@ -12,19 +12,19 @@ import Firebase
 
 struct Toppings {
     
-    var toppings: [String]
+    var toppings: String
     
     
     init?(snapshot: Any?) {
         guard let data = snapshot as? DataSnapshot, let value = data.value as? [String: AnyObject],
-            let toppings = value["toppings"] as? [String] else {
+            let toppings = value["toppings"] as? String else {
                 return nil
         }
         
         self.toppings = toppings
     }
     
-    init(toppings: [String]) {
+    init(toppings: String) {
         self.toppings = toppings
     }
     

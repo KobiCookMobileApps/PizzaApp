@@ -25,6 +25,9 @@ class ToppingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        PizzaService.toppingsRef.setValue(toppings)
+        
     }
     
     
@@ -36,12 +39,12 @@ class ToppingsViewController: UIViewController {
 //        }
         
         
-//        PizzaService.getToppings() { [unowned self] savedToppings in
-//            self.toppings = self.toppings + savedToppings
-//            DispatchQueue.main.async {
-//                self.toppingsTableView.reloadData()
-//            }
-//        }
+        PizzaService.getToppings() { [unowned self] savedToppings in
+            self.toppings = self.toppings + savedToppings
+            DispatchQueue.main.async {
+                self.toppingsTableView.reloadData()
+            }
+        }
     
     }
 
@@ -97,7 +100,7 @@ class ToppingsViewController: UIViewController {
             }
             
 //            UserDefaults.standard.set(toppingToSave, forKey: "toppings")
-            PizzaService.saveTopping(toppings: [toppingToSave])
+            PizzaService.saveTopping(toppings: [toppingToSave] + self.toppings)
             self.toppings.insert(toppingToSave, at: 0)
             self.toppingsPickerView.reloadAllComponents()
             
